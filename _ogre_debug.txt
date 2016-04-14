@@ -1,0 +1,20 @@
+00:08:51: Creating resource group General
+00:08:51: Creating resource group Internal
+00:08:51: Creating resource group Autodetect
+00:08:51: Registering ResourceManager for type Mesh
+00:08:51: Registering ResourceManager for type Material
+00:08:51: Registering ResourceManager for type Skeleton
+00:08:51: XMLSkeletonSerializer: reading XML data from /home/dario/repo/PacMan/media/Bola.skeleton.xml...
+00:08:51: XMLSkeletonSerializer: Reading Bones name...
+00:08:51: XMLSkeletonSerializer: Reading Hierarchy data...
+00:08:51: XMLSkeletonSerializer: Reading Bones data...
+00:08:51: XMLSkeletonSerializer: Reading Animations data...
+00:08:51: XMLSkeletonSerializer: Finished. Running SkeletonSerializer...
+00:08:51: Exporting bones..
+00:08:51: Bones exported.
+00:08:51: Exporting animations, count=1
+00:08:51: Exporting animation: Saltar
+00:08:51: Animation exported.
+00:08:51: Unregistering ResourceManager for type Skeleton
+00:08:51: Unregistering ResourceManager for type Material
+00:08:51: Unregistering ResourceManager for type Mesh
