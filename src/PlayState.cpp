@@ -61,6 +61,8 @@ PlayState::createScene()
   _perspective = 0;
   _camera->setPosition(Ogre::Vector3(0, 42, 7));
   _camera->lookAt(Ogre::Vector3(0, -50, 0));
+
+  _sceneMgr->setSkyDome(true, "Sky", 5, 8);
   
   nodo = _sceneMgr->getRootSceneNode()->createChildSceneNode("Escenario", Ogre::Vector3(-0.5,0.0,3.0));
   ent = _sceneMgr->createEntity("Base.mesh");
