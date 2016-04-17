@@ -59,6 +59,20 @@ PlayState::createScene()
 
   _sceneMgr->setSkyDome(true, "Sky", 5, 8);
 
+/* Cáñon */
+  _nodBase = _sceneMgr->getRootSceneNode()->createChildSceneNode(
+    "Base", Ogre::Vector3(-2, 0.001, 45));
+  ent = _sceneMgr->createEntity("Cannion_Base.mesh");
+  _nodBase->attachObject(ent);
+
+  _nodCannion = _nodBase->createChildSceneNode("Cannion", 
+    Ogre::Vector3(0, 1, 0));
+  ent = _sceneMgr->createEntity("Cannion.mesh");
+  _nodCannion->attachObject(ent);
+
+  _nodShoot = _nodCannion->createChildSceneNode("Disparo",
+    Ogre::Vector3(0, 1.7, -2));
+
   /* Fisica */
   _debugDrawer = new OgreBulletCollisions::DebugDrawer();
   _debugDrawer->setDrawWireframe(true);  
@@ -133,8 +147,10 @@ void PlayState::createInitialWorld() {
 void PlayState::shoot(){
   Ogre::Entity* entity=NULL;
   Ogre::SceneNode* node=NULL;
-  Ogre::Vector3 pos = Ogre::Vector3(-5, 1.7, 35);
-  Ogre::Vector3 _dir = Ogre::Vector3(1,5,-1);
+  Ogre::Vector3 pos = Ogre::Vector3::ZERO;
+  
+  pos = _nodShoot->_getDerivedPosition();
+  Ogre::Vector3 _dir = Ogre::Vector3(1,2,-1);
 
   entity = _sceneMgr->createEntity("ball" + Ogre::StringConverter::toString(_numBall), "ball.mesh");
   node = _sceneMgr->getRootSceneNode()->
@@ -154,9 +170,12 @@ void PlayState::shoot(){
   rigidBody->setShape(node, bodyShape,
          0.6 /* Restitucion */, 0.6 /* Friccion */,
          5.0 /* Masa */, pos /* Posicion inicial */,
-         Ogre::Quaternion::IDENTITY /* Orientacion */);	
+         Ogre::Quaternion::IDENTITY /* Orientacion */);
 
-  rigidBody->setLinearVelocity(_dir * _numBall);
+  _dir = _nodBase->getOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z;
+  _dir.y = (_nodCannion->getOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z).y;
+
+  rigidBody->setLinearVelocity(_dir * (_numBall+1));
 
   _numBall++;
 

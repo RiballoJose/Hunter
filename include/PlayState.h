@@ -100,14 +100,15 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
 
   Graph* _level;
 
-
   OgreBulletDynamics::DynamicsWorld * _world;
   OgreBulletCollisions::DebugDrawer * _debugDrawer;
 
   std::deque <OgreBulletDynamics::RigidBody *>         _bodies;
   std::deque <OgreBulletCollisions::CollisionShape *>  _shapes;
 
+  Ogre::SceneNode *_nodCannion, *_nodBase, *_nodShoot;
 
+  Ogre::Vector3 _dir;
   
 };
 
