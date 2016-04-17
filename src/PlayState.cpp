@@ -54,8 +54,8 @@ PlayState::createScene()
 
   
   _perspective = 0;
-  _camera->setPosition(Ogre::Vector3(0, 42, 7));
-  _camera->lookAt(Ogre::Vector3(0, -50, 0));
+  _camera->setPosition(Ogre::Vector3(-10, 25, 80));
+  _camera->lookAt(Ogre::Vector3(3, 0, 5));
 
   _sceneMgr->setSkyDome(true, "Sky", 5, 8);
 
@@ -133,8 +133,8 @@ void PlayState::createInitialWorld() {
 void PlayState::shoot(){
   Ogre::Entity* entity=NULL;
   Ogre::SceneNode* node=NULL;
-  Ogre::Vector3 pos = Ogre::Vector3(1,10,1);
-  Ogre::Vector3 _dir = Ogre::Vector3(1,1,1);
+  Ogre::Vector3 pos = Ogre::Vector3(-5, 1.7, 35);
+  Ogre::Vector3 _dir = Ogre::Vector3(1,5,-1);
 
   entity = _sceneMgr->createEntity("ball" + Ogre::StringConverter::toString(_numBall), "ball.mesh");
   node = _sceneMgr->getRootSceneNode()->
@@ -156,7 +156,7 @@ void PlayState::shoot(){
          5.0 /* Masa */, pos /* Posicion inicial */,
          Ogre::Quaternion::IDENTITY /* Orientacion */);	
 
-  rigidBody->setLinearVelocity(_dir + _numBall);
+  rigidBody->setLinearVelocity(_dir * _numBall);
 
   _numBall++;
 
