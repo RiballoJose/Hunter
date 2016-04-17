@@ -21,6 +21,7 @@ PlayState::enter ()
   _pSoundFXManager = SoundFXManager::getSingletonPtr();
 
   _numBall = 0;
+  _fuerza = MIN_FUERZA;
 
   createScene();
   createOverlay();
@@ -150,7 +151,6 @@ void PlayState::shoot(){
   Ogre::Vector3 pos = Ogre::Vector3::ZERO;
   
   pos = _nodShoot->_getDerivedPosition();
-  Ogre::Vector3 _dir = Ogre::Vector3(1,2,-1);
 
   entity = _sceneMgr->createEntity("ball" + Ogre::StringConverter::toString(_numBall), "ball.mesh");
   node = _sceneMgr->getRootSceneNode()->
@@ -172,10 +172,7 @@ void PlayState::shoot(){
          5.0 /* Masa */, pos /* Posicion inicial */,
          Ogre::Quaternion::IDENTITY /* Orientacion */);
 
-  _dir = _nodBase->getOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z;
-  _dir.y = (_nodCannion->getOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z).y;
-
-  rigidBody->setLinearVelocity(_dir * (_numBall+1));
+  rigidBody->setLinearVelocity(_dir * _fuerza);
 
   _numBall++;
 
@@ -211,6 +208,29 @@ PlayState::frameStarted
 (const Ogre::FrameEvent& evt)
 {
   _deltaT = evt.timeSinceLastFrame;
+
+  if(!_exitGame){
+    /* Movimiento del cañon */
+    if(_derecha && _nodBase->getOrientation().zAxis().x > (-0.95)){
+      _nodBase->yaw(Ogre::Degree(-180 * _deltaT));
+    } else if(_izquierda && _nodBase->getOrientation().zAxis().x < (0.95)){
+      _nodBase->yaw(Ogre::Degree(180 * _deltaT));
+    } else if(_arriba && _nodCannion->getOrientation().zAxis().y > (-0.5)){
+      _nodCannion->pitch(Ogre::Degree(180 * _deltaT));
+    } else if(_abajo && _nodCannion->getOrientation().zAxis().y < (0.15)){
+      _nodCannion->pitch(Ogre::Degree((-180) * _deltaT));
+    }
+   }
+
+    /* Calculo de la direccion del disparo */
+    _dir = _nodBase->getOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z;
+    _dir.y = (_nodCannion->getOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z).y;
+
+    /* Incremento de la fuerza de disparo */
+    if(_shoot && (_fuerza <= MAX_FUERZA)){
+      _fuerza += INC_FUERZA;
+    }
+
   _score = 0;
   _ovScore->setCaption(Ogre::StringConverter::toString(_score));
   if(!_exitGame){
@@ -261,7 +281,7 @@ PlayState::keyPressed
 (const OIS::KeyEvent &e)
 {
   switch(e.key){
-  case OIS::KC_SPACE:
+  case OIS::KC_P:
     pushState(PauseState::getSingletonPtr());
     break;
   case OIS::KC_ESCAPE://overlay?
@@ -284,35 +304,21 @@ PlayState::keyPressed
 	break;
       }
       break;
-/*  case OIS::KC_RIGHT:
-    _simpleEffect->play();
-    _pacman->lookAt(Ogre::Vector3(0,0,-999), _pacman->TS_WORLD);
-    _prevDir = _currentDir;
-    _currentDir = 1;
-    _nextDir = 1;
-    break;
-  case OIS::KC_LEFT:
-    _simpleEffect->play();
-    _pacman->lookAt(Ogre::Vector3(0,0,999), _pacman->TS_WORLD);
-    _prevDir = _currentDir;
-    _currentDir = 3;
-    _nextDir = 3;
-    break;
-  case OIS::KC_UP:
-    _simpleEffect->play();
-    _pacman->lookAt(Ogre::Vector3(-999,0,0), _pacman->TS_WORLD);
-    _prevDir = _currentDir;
-    _currentDir = 4;
-    _nextDir = 4;
-    break;
-  case OIS::KC_DOWN:
-    _simpleEffect->play();
-    _pacman->lookAt(Ogre::Vector3(999,0,0), _pacman->TS_WORLD);
-    _prevDir = _currentDir;
-    _currentDir = 2;
-    _nextDir = 2;
-    break;
- */
+case OIS::KC_RIGHT:
+		_derecha = true;
+		break;
+	case OIS::KC_LEFT:
+		_izquierda = true;
+		break;
+	case OIS::KC_UP:
+		_arriba = true;
+		break;
+	case OIS::KC_DOWN:
+		_abajo = true;
+		break;
+	case OIS::KC_SPACE:
+		_shoot = true;
+		break;
   default:
     break;
   }
@@ -322,6 +328,23 @@ PlayState::keyReleased
 (const OIS::KeyEvent &e)
 {
   switch(e.key){
+  	case OIS::KC_RIGHT:
+      _derecha = false;
+      break;
+    case OIS::KC_LEFT:
+      _izquierda = false;
+      break;
+    case OIS::KC_UP:
+      _arriba = false;
+      break;
+    case OIS::KC_DOWN:
+      _abajo = false;
+      break;
+    case OIS::KC_SPACE:
+      _shoot = false;
+      shoot();
+      _fuerza = MIN_FUERZA;
+      break;
   case OIS::KC_ESCAPE:
     _exitGame = true;
     break;

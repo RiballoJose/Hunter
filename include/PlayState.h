@@ -21,6 +21,10 @@
 #ifndef PlayState_H
 #define PlayState_H
 
+#define MAX_FUERZA 40.0
+#define MIN_FUERZA 10.0
+#define INC_FUERZA 0.75
+
 #include <Ogre.h>
 #include <OIS/OIS.h>
 #include <cstdlib>
@@ -80,9 +84,12 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   Ogre::Light* _light;
 
 
-  bool _exitGame;
+  bool _exitGame, _derecha, _arriba, _abajo, _izquierda, _shoot;
 
   int _perspective, _score, _numBall;
+
+
+  float _fuerza;
 
   Ogre::Real _deltaT;
   Ogre::Vector3 _pacMove;
