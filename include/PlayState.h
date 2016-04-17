@@ -25,6 +25,17 @@
 #include <OIS/OIS.h>
 #include <cstdlib>
 
+#include <OgreBulletDynamicsRigidBody.h>
+
+#include <Shapes/OgreBulletCollisionsBoxShape.h>
+#include <Shapes/OgreBulletCollisionsConvexHullShape.h>
+#include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
+#include <Shapes/OgreBulletCollisionsTrimeshShape.h>
+
+#include <Utils/OgreBulletCollisionsMeshToShapeConverter.h> 
+
+#include <btBulletDynamicsCommon.h>
+
 #include "GameState.h"
 #include "EndState.h"
 #include "Graph.h"
@@ -58,6 +69,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   void destroyAllAttachedMovableObjects(Ogre::SceneNode* node);
   void removeScene();
   void createOverlay();
+  void createInitialWorld();
 
  protected:
   Ogre::Root* _root;
@@ -86,6 +98,14 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   Ogre::AnimationState *_animState;
 
   Graph* _level;
+
+
+  OgreBulletDynamics::DynamicsWorld * _world;
+  OgreBulletCollisions::DebugDrawer * _debugDrawer;
+
+  std::deque <OgreBulletDynamics::RigidBody *>         _bodies;
+  std::deque <OgreBulletCollisions::CollisionShape *>  _shapes;
+
 
   
 };
