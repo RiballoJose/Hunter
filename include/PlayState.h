@@ -53,25 +53,11 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   static PlayState& getSingleton ();
   static PlayState* getSingletonPtr ();
 
-  void LoadLevels();
-  void nextLevel();
-  void removeLevel();
   void createScene();
   void pacmanMove();
-  void ghostMove(Ghost* ghost);
-  bool colisionMap(int dir, Ogre::SceneNode* node);
-  void died();
-  bool hit(Ghost* ghost);
-  void resetGhost(Ghost* ghost);
   void destroyAllAttachedMovableObjects(Ogre::SceneNode* node);
   void removeScene();
   void createOverlay();
-  void calculateAdjs();
-  void canEat(bool b);
-  void eating();
-  void flicker();
-  void blinking();
-  void animar();
 
  protected:
   Ogre::Root* _root;
@@ -80,27 +66,13 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   Ogre::Camera* _camera;
   Ogre::Light* _light;
 
-  int** _levels;
-  int _hits, _filas, _columnas, _currentDir, _nextDir, _prevDir,
-    _currentLevel, _perspective, _nwalls, _nPacDots, _score;
-  double _pacSpeed, _startRow, _currentRow, _startCol,
-    _currentCol, _prevRow, _prevCol, _canDied;
-  bool _exitGame,  _endLevel, _pacmanDef, _canEat;
+
+  bool _exitGame;
+
+  int _perspective, _score;
 
   Ogre::Real _deltaT;
   Ogre::Vector3 _pacMove;
-  
-  std::vector<Ogre::SceneNode*> _lifes;
-  Ogre::SceneNode* _pacman;
-  Ogre::Vector3 _startPos;
-  Ghost* _blinky;//fantasma rojo
-
-  Ghost* _pinky;//rosa
-  Ghost* _inky;//azul cian
-  Ghost* _clyde;//naranja
-  std::vector<int>* _wallRows;
-  std::vector<int>* _wallCols;
-  std::vector<std::string>* _anim;
   
   Ogre::OverlayManager* _overlayManager;
   Ogre::Overlay *_ovJuego;
