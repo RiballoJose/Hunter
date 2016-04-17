@@ -20,6 +20,8 @@ PlayState::enter ()
   _pTrackManager = TrackManager::getSingletonPtr();
   _pSoundFXManager = SoundFXManager::getSingletonPtr();
 
+  _numBall = 0;
+
   createScene();
   createOverlay();
   createInitialWorld();
@@ -95,7 +97,7 @@ PlayState::createScene()
 }
 
 void PlayState::createInitialWorld() {
-  Ogre::Entity* entity=NULL;
+  
 
  /* Creacion de la entidad y del SceneNode */
   Ogre::Plane plane1(Ogre::Vector3::UNIT_Y, 0);
@@ -124,9 +126,17 @@ void PlayState::createInitialWorld() {
   /* Anadimos los objetos Shape y RigidBody */
   _shapes.push_back(Shape);      _bodies.push_back(rigidBodyPlane);
 
-  Ogre::Vector3 pos = Ogre::Vector3(1,10,1);
+  
+  std::cout << "3" << std::endl;
+}
 
-  entity = _sceneMgr->createEntity("ball", "ball.mesh");
+void PlayState::shoot(){
+  Ogre::Entity* entity=NULL;
+  Ogre::SceneNode* node=NULL;
+  Ogre::Vector3 pos = Ogre::Vector3(1,10,1);
+  Ogre::Vector3 _dir = Ogre::Vector3(1,1,1);
+
+  entity = _sceneMgr->createEntity("ball" + Ogre::StringConverter::toString(_numBall), "ball.mesh");
   node = _sceneMgr->getRootSceneNode()->
     createChildSceneNode();
   node->attachObject(entity);
@@ -139,16 +149,21 @@ void PlayState::createInitialWorld() {
     OgreBulletCollisions::StaticMeshToShapeConverter(entity);
   bodyShape = trimeshConverter->createConvex();
 
-  rigidBody = new OgreBulletDynamics::RigidBody("rigidBody", _world);
+  rigidBody = new OgreBulletDynamics::RigidBody("rigidBody" + Ogre::StringConverter::toString(_numBall), _world);
 
   rigidBody->setShape(node, bodyShape,
          0.6 /* Restitucion */, 0.6 /* Friccion */,
          5.0 /* Masa */, pos /* Posicion inicial */,
          Ogre::Quaternion::IDENTITY /* Orientacion */);	
 
+  rigidBody->setLinearVelocity(_dir + _numBall);
+
+  _numBall++;
+
   _shapes.push_back(bodyShape);   _bodies.push_back(rigidBody);
 
-  std::cout << "3" << std::endl;
+  std::cout << "4" << std::endl;
+
 }
 
 
@@ -232,7 +247,8 @@ PlayState::keyPressed
     break;
   case OIS::KC_ESCAPE://overlay?
     break;
-  case OIS::KC_P:
+  case OIS::KC_A:
+  	shoot();
     break;
   case OIS::KC_C:
       _perspective = (_perspective+1) % 2;

@@ -70,6 +70,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
   void removeScene();
   void createOverlay();
   void createInitialWorld();
+  void shoot();
 
  protected:
   Ogre::Root* _root;
@@ -81,7 +82,7 @@ class PlayState : public Ogre::Singleton<PlayState>, public GameState
 
   bool _exitGame;
 
-  int _perspective, _score;
+  int _perspective, _score, _numBall;
 
   Ogre::Real _deltaT;
   Ogre::Vector3 _pacMove;
