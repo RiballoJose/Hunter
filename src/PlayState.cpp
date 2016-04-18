@@ -60,6 +60,11 @@ PlayState::createScene()
 
   _sceneMgr->setSkyDome(true, "Sky", 5, 8);
 
+   nodo = _sceneMgr->getRootSceneNode()->createChildSceneNode(
+    "Duck", Ogre::Vector3(-2, 6, 20));
+  ent = _sceneMgr->createEntity("Duck.mesh");
+   nodo->attachObject(ent);
+
 /* Cáñon */
   _nodBase = _sceneMgr->getRootSceneNode()->createChildSceneNode(
     "Base", Ogre::Vector3(-2, 0.001, 45));
@@ -285,9 +290,6 @@ PlayState::keyPressed
     pushState(PauseState::getSingletonPtr());
     break;
   case OIS::KC_ESCAPE://overlay?
-    break;
-  case OIS::KC_A:
-  	shoot();
     break;
   case OIS::KC_C:
       _perspective = (_perspective+1) % 2;
