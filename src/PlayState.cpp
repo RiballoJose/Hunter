@@ -61,13 +61,15 @@ PlayState::createScene()
   _sceneMgr->setSkyDome(true, "Sky", 5, 8);
 
    nodo = _sceneMgr->getRootSceneNode()->createChildSceneNode(
-    "Duck", Ogre::Vector3(-2, 6, 20));
+    "Duck", Ogre::Vector3(-2, 3, 20));
   ent = _sceneMgr->createEntity("Duck.mesh");
    nodo->attachObject(ent);
+   nodo->setScale(0.5,0.5,0.5);
+   nodo->yaw(Ogre::Degree(-90));
 
 /* Cáñon */
   _nodBase = _sceneMgr->getRootSceneNode()->createChildSceneNode(
-    "Base", Ogre::Vector3(-2, 0.001, 45));
+    "Base", Ogre::Vector3(-5, 0.001, 45));
   ent = _sceneMgr->createEntity("Cannion_Base.mesh");
   _nodBase->attachObject(ent);
 
